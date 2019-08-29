@@ -7,4 +7,5 @@ func main(){
 
 	// 演示转义字符的使用
 	fmt.Println("tom\tjack")
+	fmt.Println("Hello\nWorld")
 }
