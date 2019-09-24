@@ -23,8 +23,8 @@ func main() {
 	fmt.Println(fruits)
 
 	// map的多层嵌套使用
-	students := make(map[string]map[string]string)
-	students["no1"] = make(map[string]string, 2)
+	students := make(map[string]map[string]string)  // 第一层map
+	students["no1"] = make(map[string]string, 2)    // 第二层map
 	students["no1"]["name"] = "张三"
 	students["no1"]["sex"] = "男"
 
