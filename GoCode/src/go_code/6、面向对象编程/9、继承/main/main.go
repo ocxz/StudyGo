@@ -1,6 +1,6 @@
 package main
 import (
-	// fmt"
+	"fmt"
 	"go_code/6、面向对象编程/9、继承/model"
 )
 
@@ -24,4 +24,18 @@ func main() {
 	graduate.Testing()
 	graduate.Student.SetScore(90)
 	graduate.Student.ShowInfo()
+
+	book := &model.Book{}
+	book.Goods.Name = "红楼梦"
+	book.Goods.Price = 18
+	book.Writer = "曹雪芹"
+	fmt.Println(*book)
+
+	// 结构体变量创建时，可直接指定各个匿名结构体字段的值
+	tv := &model.TV{
+		&model.Goods{"电视机", 5000},
+		&model.Brand{"海尔", "山东"},
+	}
+	// 底层转换-->*((*tv).Goods)
+	fmt.Println(*((*tv).Goods), *tv.Brand)
 }
