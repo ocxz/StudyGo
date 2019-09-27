@@ -40,14 +40,32 @@ func unmarshalMap() {
 	// 反序列化
 	err := json.Unmarshal([]byte(str), &m)
 	if err != nil {
-		fmt.Println("结构体反序列化失败，失败原因：\n", err)
+		fmt.Println("map反序列化失败，失败原因：\n", err)
 		return
 	}
 	fmt.Println(m)
 }
 
+// 将字符串反序列化成切片
+func unmarshalSlice() {
+
+	str := ` [{"address":"北京","age":7,"name":"jack"},{"address":["北京","上海","天津"],"age":20,"name":"tom"}]`
+	var slice []map[string]interface{}
+
+	// 反序列化
+	err := json.Unmarshal([]byte(str), &slice)
+	if err != nil {
+		fmt.Println("切片反序列化失败，失败原因：\n", err)
+		return
+	}
+	fmt.Println(slice)
+}
+
+
+
 func main() {
 
 	unmarshalStruct()
 	unmarshalMap()
+	unmarshalSlice()
 }
