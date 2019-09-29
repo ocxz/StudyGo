@@ -2,7 +2,7 @@ package main
 import (
 	"fmt"
 	"net"   // 做网络socket开发时，net包含我们所需的所有方法和函数
-	""
+	_ "io"
 )
 
 // 处理客户端的请求
@@ -10,17 +10,22 @@ func process(conn net.Conn) {
 
 	// 这里我们循环接收客户端发送的数据
 	defer conn.Close()   // 关闭conn连接
+	fmt.Printf("服务器在等待客户端%v的输入\n", conn.RemoteAddr().String())
 	for {
 		// 创建一个新的切片
 		buf := make([]byte, 1024)
-		fmt.Printf("服务器在等待客户端%v的输入\n", conn.RemoteAddr().String())
 		n, err := conn.Read(buf)    // 客户端没有发送数据，就会一直阻塞，如果客户端没有write，那么协程就会阻塞在这里
+		// if err == io.EOF {
+		// 	fmt.Println("客户端退出")
+		// 	return
+		// }
 		if err != nil {
 			fmt.Println("服务端读取客户端发送的数据失败，失败原因：", err)
-			if err == io.EOF {
-				fmt.Println("客户端退出")
-				return
-			}
+		}
+		msg := string(buf[:n])   // 客户端发过来的信息
+		if msg == "exit" {
+			fmt.Printf("客户端%v结束了会话\n", conn.RemoteAddr().String())
+			return
 		}
 		// 显示客户端发送的数据到服务器终端
 		// 陷阱：1、不需要println，因为客户端发送过来的一行中，已经有\n换行符了
