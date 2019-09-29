@@ -10,7 +10,8 @@ func process(conn net.Conn) {
 
 	// 这里我们循环接收客户端发送的数据
 	defer conn.Close()   // 关闭conn连接
-	fmt.Printf("服务器在等待客户端%v的输入\n", conn.RemoteAddr().String())
+	client := conn.RemoteAddr().String()
+	fmt.Printf("服务器在等待客户端%v的输入\n", client)
 	for {
 		// 创建一个新的切片
 		buf := make([]byte, 1024)
@@ -21,17 +22,31 @@ func process(conn net.Conn) {
 		// }
 		if err != nil {
 			fmt.Println("服务端读取客户端发送的数据失败，失败原因：", err)
+			return
 		}
 		msg := string(buf[:n])   // 客户端发过来的信息
-		if msg == "exit" {
-			fmt.Printf("客户端%v结束了会话\n", conn.RemoteAddr().String())
+		if msg == "exit\r\n" {
+			fmt.Printf("客户端%v结束了会话\n", client)
 			return
 		}
 		// 显示客户端发送的数据到服务器终端
 		// 陷阱：1、不需要println，因为客户端发送过来的一行中，已经有\n换行符了
 		//      2、只能使用切片来接收，如果要显示需要将其转为string
 		//      3、切片必须是 :n，防止将切片后面乱起八糟的数据，也给转换输出了
-		fmt.Print(string(buf[:n]))
+		fmt.Print(client, "说：", string(buf[:n]))
+		resMsg := ""
+		switch msg {
+		case "你好\r\n":
+			resMsg = "你好，大兄弟"
+		case "同志们好\r\n":
+			resMsg = "首长好"
+		case "同志们辛苦了\r\n":
+			resMsg = "不辛苦"
+		default:
+			resMsg = "不晓得你在说个撒子"
+		}
+		conn.Write([]byte(resMsg))
+		fmt.Println("服务器说：", resMsg)
 	}
 }
 func main() {

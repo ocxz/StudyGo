@@ -25,6 +25,7 @@ func main() {
 		line, err := reader.ReadString('\n')
 		if err != nil {
 			fmt.Println("读取终端输入失败，失败原因：", err)
+			return
 		}
 
 		// 再将line方法送给服务器，即向连接中写入数据
@@ -33,7 +34,7 @@ func main() {
 			fmt.Println("向连接写入失败，失败原因：", err)
 		}
 		fmt.Printf("客户端发送了%v个字节的数据\n", n)
-		if line == "exit" {
+		if line == "exit\n" {
 			fmt.Println("结束向服务端发送数据")
 			break
 		}
