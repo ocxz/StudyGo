@@ -4,6 +4,7 @@ import (
 	"net"
 	"bufio"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -25,6 +26,7 @@ func main() {
 		// 从终端读取一行用户输入，并发送给服务器
 		fmt.Print("我说：")
 		line, err := reader.ReadString('\n')
+		line = strings.Trim(line, " \r\n")
 		if err != nil {
 			fmt.Println("读取终端输入失败，失败原因：", err)
 			return
@@ -36,7 +38,7 @@ func main() {
 			fmt.Println("向连接写入失败，失败原因：", err)
 		}
 		sum += wn
-		if line == "exit\r\n" {
+		if line == "exit" {
 			fmt.Printf("结束向服务端发送数据，一共向服务器发送了%v个字节的数据\n", sum)
 			break
 		}
