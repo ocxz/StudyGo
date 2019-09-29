@@ -2,6 +2,7 @@ package main
 import (
 	"fmt"
 	"net"   // 做网络socket开发时，net包含我们所需的所有方法和函数
+	""
 )
 
 // 处理客户端的请求
@@ -16,7 +17,10 @@ func process(conn net.Conn) {
 		n, err := conn.Read(buf)    // 客户端没有发送数据，就会一直阻塞，如果客户端没有write，那么协程就会阻塞在这里
 		if err != nil {
 			fmt.Println("服务端读取客户端发送的数据失败，失败原因：", err)
-			return    // 结束本次socket连接
+			if err == io.EOF {
+				fmt.Println("客户端退出")
+				return
+			}
 		}
 		// 显示客户端发送的数据到服务器终端
 		// 陷阱：1、不需要println，因为客户端发送过来的一行中，已经有\n换行符了
